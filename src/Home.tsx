@@ -166,60 +166,99 @@ const Home = (props: HomeProps) => {
   ]);
 
   return (
-    <main>
-      {wallet && (
-        <p>Wallet {shortenAddress(wallet.publicKey.toBase58() || "")}</p>
-      )}
+    <main style={{
+      display:"flex",
+      flexDirection:"column",
+      height:"100vh",
+      justifyContent:"center",
+      alignItems:"center",
+      backgroundColor:"#222831",
+      color:"#EEEEEE"
+    }}>
+      <h1 style={{
+        color:"#FFD369",
+        fontFamily:"Poiret One"
+      }}>The Crypto Doe</h1>
+      <div style={{
+          flexDirection:"column", 
+          display:"flex", 
+          justifyContent:"center", 
+          alignItems:"center", 
+          minWidth:"640px",
+          minHeight:"300px",
+          backgroundColor:"#393E46",
+          borderRadius:"0.5em",
+          padding:"1.5em 2.5em"
+          }}>
+        <div style={{
+          textAlign:"center"
+        }}>
+          {wallet && (
+            <p>Wallet {shortenAddress(wallet.publicKey.toBase58() || "")}</p>
+          )}
 
-      {wallet && <p>Balance: {(balance || 0).toLocaleString()} SOL</p>}
+          {wallet && <p>Balance: {(balance || 0).toLocaleString()} SOL</p>}
 
-      {wallet && <p>Total Available: {itemsAvailable}</p>}
+          {wallet && <p>Total Available: {itemsAvailable}</p>}
 
-      {wallet && <p>Redeemed: {itemsRedeemed}</p>}
+          {wallet && <p>Redeemed: {itemsRedeemed}</p>}
 
-      {wallet && <p>Remaining: {itemsRemaining}</p>}
-
-      <MintContainer>
-        {!wallet ? (
-          <ConnectButton>Connect Wallet</ConnectButton>
-        ) : (
-          <MintButton
-            disabled={isSoldOut || isMinting || !isActive}
-            onClick={onMint}
-            variant="contained"
-          >
-            {isSoldOut ? (
-              "SOLD OUT"
-            ) : isActive ? (
-              isMinting ? (
-                <CircularProgress />
-              ) : (
-                "MINT"
-              )
+          {wallet && <p>Remaining: {itemsRemaining}</p>}
+        </div>
+        <div style={{
+            display:"flex",
+            justifyContent:"center",
+            alignItems:"center",
+        }}>
+          <MintContainer>
+            {!wallet ? (
+              <ConnectButton>Connect Wallet</ConnectButton>
             ) : (
-              <Countdown
-                date={startDate}
-                onMount={({ completed }) => completed && setIsActive(true)}
-                onComplete={() => setIsActive(true)}
-                renderer={renderCounter}
-              />
+              <MintButton
+                disabled={isSoldOut || isMinting || !isActive}
+                onClick={onMint}
+                variant="contained"
+                style={{
+                  backgroundColor:"#FFD369",
+                  width:"200px",
+                  justifyContent:"center",
+                  alignContent:"center"
+                }}
+              >
+                {isSoldOut ? (
+                  "SOLD OUT"
+                ) : isActive ? (
+                  isMinting ? (
+                    <CircularProgress />
+                  ) : (
+                    "MINT"
+                  )
+                ) : (
+                  <Countdown
+                    date={startDate}
+                    onMount={({ completed }) => completed && setIsActive(true)}
+                    onComplete={() => setIsActive(true)}
+                    renderer={renderCounter}
+                  />
+                )}
+              </MintButton>
             )}
-          </MintButton>
-        )}
-      </MintContainer>
+          </MintContainer>
+        </div>
 
-      <Snackbar
-        open={alertState.open}
-        autoHideDuration={6000}
-        onClose={() => setAlertState({ ...alertState, open: false })}
-      >
-        <Alert
+        <Snackbar
+          open={alertState.open}
+          autoHideDuration={6000}
           onClose={() => setAlertState({ ...alertState, open: false })}
-          severity={alertState.severity}
         >
-          {alertState.message}
-        </Alert>
-      </Snackbar>
+          <Alert
+            onClose={() => setAlertState({ ...alertState, open: false })}
+            severity={alertState.severity}
+          >
+            {alertState.message}
+          </Alert>
+        </Snackbar>
+      </div>
     </main>
   );
 };
